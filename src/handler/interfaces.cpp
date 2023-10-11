@@ -413,13 +413,11 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS)
     ext.udp.define(argUDP).define(global.UDPFlag);
     ext.skip_cert_verify.define(argSkipCertVerify).define(global.skipCertVerify);
     ext.tls13.define(argTLS13).define(global.TLS13Flag);
- 
+
     ext.sort_flag = argSort.get(global.enableSort);
-    if(ext.sort_flag)
-        if(argUseSortScript.size() == 0)
-            ext.sort_script = global.sortScript;
-        else
-            ext.sort_script = argUseSortScript
+    // argUseSortScript.define(global.sortScript.size() != 0);
+    if(ext.sort_flag && argUseSortScript)
+        ext.sort_script = argUseSortScript.get(global.sortScript);
     ext.filter_deprecated = argFilterDeprecated.get(global.filterDeprecated);
     ext.clash_new_field_name = argClashNewField.get(global.clashUseNewField);
     ext.clash_script = argGenClashScript.get();
