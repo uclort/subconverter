@@ -415,8 +415,8 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS)
     ext.tls13.define(argTLS13).define(global.TLS13Flag);
 
     ext.sort_flag = argSort.get(global.enableSort);
-    argUseSortScript.define(global.sortScript.size() != 0);
-    if(ext.sort_flag && argUseSortScript)
+    // argUseSortScript.define(global.sortScript.size() != 0);
+    if(ext.sort_flag)
         if(argUseSortScript.get().size() == 0) 
             ext.sort_script = global.sortScript;
         else
