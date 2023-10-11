@@ -1,5 +1,5 @@
 FROM alpine:3.16
-LABEL maintainer "tindy.it@gmail.com"
+LABEL maintainer "uclort@gmail.com"
 ARG THREADS="4"
 ARG SHA=""
 
@@ -34,7 +34,7 @@ RUN apk add --no-cache --virtual .build-tools git g++ build-base linux-headers c
     cmake -DCMAKE_CXX_STANDARD=11 . && \
     make install -j $THREADS && \
     cd .. && \
-    git clone https://github.com/tindy2013/subconverter --depth=1 && \
+    git clone https://github.com/uclort/subconverter --depth=1 && \
     cd subconverter && \
     [ -n "$SHA" ] && sed -i 's/\(v[0-9]\.[0-9]\.[0-9]\)/\1-'"$SHA"'/' src/version.h;\
     python3 -m ensurepip && \
