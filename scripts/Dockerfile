@@ -4,11 +4,11 @@ ARG SHA=""
 
 # build minimized
 WORKDIR /
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories && apk update && \
+RUN apk update && \
     apk add --no-cache --virtual .build-tools git g++ build-base linux-headers cmake python3 && \
     apk add --no-cache --virtual .build-deps curl-dev rapidjson-dev libevent-dev pcre2-dev yaml-cpp-dev
 RUN git clone https://github.com/ftk/quickjspp --depth=1 && \
-    pushd quickjspp && \
+    cd quickjspp && \
     git submodule update --init && \
     cmake -DCMAKE_BUILD_TYPE=Release . && \
     make quickjs -j $THREADS && \
@@ -17,9 +17,9 @@ RUN git clone https://github.com/ftk/quickjspp --depth=1 && \
     install -d /usr/include/quickjs/ && \
     install -m644 quickjs/quickjs.h quickjs/quickjs-libc.h /usr/include/quickjs/ && \
     install -m644 quickjspp.hpp /usr/include && \
-    popd
+    cd ..
 RUN git clone https://github.com/PerMalmberg/libcron --depth=1 && \
-    pushd libcron && \
+    cd libcron && \
     git submodule update --init && \
     cmake -DCMAKE_BUILD_TYPE=Release . && \
     make libcron -j $THREADS && \
@@ -28,15 +28,15 @@ RUN git clone https://github.com/PerMalmberg/libcron --depth=1 && \
     install -m644 libcron/include/libcron/* /usr/include/libcron/ && \
     install -d /usr/include/date/ && \
     install -m644 libcron/externals/date/include/date/* /usr/include/date/ && \
-    popd
+    cd ..
 RUN git clone https://github.com/ToruNiina/toml11 --depth=1 && \
-    pushd toml11 && \
+    cd toml11 && \
     cmake -DCMAKE_CXX_STANDARD=11 . && \
     make install -j $THREADS && \
-    popd
+    cd ..
 
-COPY ../ /subconverter
-RUN pushd subconverter && \
+RUN git clone https://github.com/uclort/subconverter /subconverter && \
+    cd /subconverter && \
     [ -n "$SHA" ] && sed -i 's/\(v[0-9]\.[0-9]\.[0-9]\)/\1-'"$SHA"'/' src/version.h;\
     python3 -m ensurepip && \
     python3 -m pip install gitpython && \
